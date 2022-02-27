@@ -1,6 +1,5 @@
 <template>
-<!-- 一级路由 -->
-<router-view></router-view>
+  <div class="container" >首页</div>
 </template>
 
 <script>
