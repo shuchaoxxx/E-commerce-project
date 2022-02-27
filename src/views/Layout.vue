@@ -3,8 +3,9 @@
   <AppTopNavbar></AppTopNavbar>
   <!-- 头部菜单 -->
   <AppHeader></AppHeader>
+  <!-- 头部吸顶组件 -->
+  <AppHeaderSticky></AppHeaderSticky>
   <main>
-    <div class="main-box" ></div>
     <router-view></router-view>
   </main>
   <!-- 底部 -->
@@ -15,9 +16,16 @@
 import AppTopNavbar from '@/components/app-topnav.vue'
 import AppHeader from '@/components/app-header.vue'
 import AppFooter from '@/components/app-footer.vue'
+import AppHeaderSticky from '@/components/app-header-sticky.vue'
+import { useStore } from 'vuex'
 
 export default {
-  components: { AppTopNavbar, AppHeader, AppFooter }
+  components: { AppTopNavbar, AppHeader, AppFooter, AppHeaderSticky },
+  setup () {
+    // 调用接口，获取头部分类数据
+    const store = useStore()
+    store.dispatch('category/getList')
+  }
 
 }
 </script>
