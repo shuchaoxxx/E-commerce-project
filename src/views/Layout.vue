@@ -5,9 +5,11 @@
   <AppHeader></AppHeader>
   <!-- 头部吸顶组件 -->
   <AppHeaderSticky></AppHeaderSticky>
-  <main>
-    <router-view></router-view>
-  </main>
+  <!-- 主体内容部分 -->
+  <div class="app-body">
+    <!-- 二级路由 -->
+    <RouterView></RouterView>
+  </div>
   <!-- 底部 -->
   <AppFooter></AppFooter>
 </template>
@@ -32,7 +34,7 @@ export default {
 
 <style scoped lang='less' >
 
-.main-box{
+.app-body{
   height: 600px;
 }
 
