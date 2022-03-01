@@ -6,10 +6,10 @@
   <!-- 头部吸顶组件 -->
   <AppHeaderSticky></AppHeaderSticky>
   <!-- 主体内容部分 -->
-  <div class="app-body">
+
     <!-- 二级路由 -->
     <RouterView></RouterView>
-  </div>
+
   <!-- 底部 -->
   <AppFooter></AppFooter>
 </template>
@@ -22,6 +22,7 @@ import AppHeaderSticky from '@/components/app-header-sticky.vue'
 import { useStore } from 'vuex'
 
 export default {
+  name: 'Layout',
   components: { AppTopNavbar, AppHeader, AppFooter, AppHeaderSticky },
   setup () {
     // 调用接口，获取头部分类数据
@@ -33,9 +34,5 @@ export default {
 </script>
 
 <style scoped lang='less' >
-
-.app-body{
-  height: 600px;
-}
 
 </style>

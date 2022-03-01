@@ -1,5 +1,5 @@
 <template>
-  <header class="app-header" >
+<header class="app-header" >
 <div class="container">
   <h1 class="logo"> <router-link to='/'>  小兔鲜 </router-link></h1>
   <AppHeaderNav></AppHeaderNav>

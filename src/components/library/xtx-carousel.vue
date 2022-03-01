@@ -3,9 +3,9 @@
   <!-- 主体图片 -->
   <ul class="carousel-body" >
     <li class="carousel-item"  v-for="(item,i) in sliders" :key="i" :class="{fade:index === i}" >
-      <RouterLInk>
+      <RouterLink to="/" >
         <img :src="item.imgUrl" alt="">
-      </RouterLInk>
+      </RouterLink>
     </li>
   </ul>
   <!-- 上一张与下一张的按钮 -->
