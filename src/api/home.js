@@ -13,7 +13,7 @@ export const findBrand = (limit) => {
  * @returns Promise
  */
 export const findBanner = () => {
-  return request('/home/banner/', 'get')
+  return request('/home/banner', 'get')
 }
 
 /***

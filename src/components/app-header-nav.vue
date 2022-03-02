@@ -6,7 +6,7 @@
         <div class="layer" :class="{open:item.open}" >
         <ul>
           <li v-for="i in item.children" :key="i.id">
-            <RouterLink :to="`/category/sub/${ item.id }`" @click="hide(item)" >
+            <RouterLink :to="`/category/sub/${ i.id }`" @click="hide(item)" >
               <img :src="i.picture" alt="">
               <p>{{i.name}}</p>
             </RouterLink>
