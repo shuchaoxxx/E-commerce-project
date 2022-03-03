@@ -51,7 +51,6 @@ export default {
     // 根据地址栏中的id获取vuex中的数据
     const store = useStore()
     const route = useRoute()
-    console.log('route.params.id', route.params.id)
     const topCategory = computed(() => {
       let cate = {}
       const item = store.state.category.list.find(item => item.id === route.params.id)
@@ -72,8 +71,7 @@ export default {
     }
 
     watch(() => route.params.id, (newValue) => {
-      newValue && getSubList()
-      console.log(subList)
+      if (newValue && `/category/${newValue}` === route.path) getSubList()
     }, { immediate: true })
     return { sliders, topCategory, subList }
   }

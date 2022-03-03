@@ -55,6 +55,6 @@ export default (url, method, submitData) => {
     // axios规定，get用params传参，method用data传参。
     // 如果method是get，用params来传递参数，
     // 如果method不是get使用data来传递参数。
-    [method.toLowerCase() === 'get' ? 'parmas' : 'data']: submitData
+    [method.toLowerCase() === 'get' ? 'params' : 'data']: submitData
   })
 }

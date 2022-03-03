@@ -20,7 +20,11 @@ const routes = [
 
 const router = createRouter({
   history: createWebHashHistory(), // 暂时使用hash方式实现路由
-  routes
+  routes,
+  // scrollBehavior: { left: 0, top: 0 }
+  scrollBehavior () {
+    return { left: 0, top: 0 }
+  }
 })
 
 export default router
