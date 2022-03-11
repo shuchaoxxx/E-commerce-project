@@ -59,7 +59,8 @@
         </div>
       </div>
     </div>
-
+<!-- 分页组价 -->
+   <XtxPagination @current-change="changePager" ></XtxPagination>
   </div>
 </template>
 <script>
@@ -110,6 +111,7 @@ export default {
       tag: null,
       sortField: null
     })
+
     // 改变排序
     const changeSort = (type) => {
       reqParams.sortField = type
@@ -118,9 +120,12 @@ export default {
 
     // 监听数据是否该改变 改变后就重新发起请求
     const commentList = ref([])
+    // 记录总条数
+    const total = ref(0)
     watch(reqParams, async () => {
       const data = await findGoodsCommentList(goods.value.id, reqParams)
       commentList.value = data.result.items
+      total.value = data.result.counts
     }, { immediate: true })
 
     // 定义转换数据的函数（对应vue2.0的过滤器）
@@ -130,8 +135,12 @@ export default {
     const formatNickname = (nickname) => {
       return nickname.substr(0, 1) + '****' + nickname.substr(-1)
     }
+    // 改变分页的函数
+    const changePager = (newPage) => {
+      reqParams.page = newPage
+    }
 
-    return { commentInfo, currentIndex, changeTag, changeSort, reqParams, formatSpecs, formatNickname, commentList }
+    return { commentInfo, currentIndex, changeTag, changeSort, reqParams, formatSpecs, formatNickname, commentList, changePager }
   }
 }
 </script>
