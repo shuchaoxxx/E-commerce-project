@@ -1,6 +1,6 @@
 <template>
   <div class="goods-item">
-    <RouterLink to="/" class="image" >
+    <RouterLink :to="`/product/${goods.id}`" class="image" >
       <img v-lazy="goods.picture" alt="" />
     </RouterLink>
     <div class="name ellipsis-2" >{{goods.name}}</div>

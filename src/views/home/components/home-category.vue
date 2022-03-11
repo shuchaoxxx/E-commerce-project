@@ -21,7 +21,7 @@
     <h4 v-if="currCategory" >{{currCategory.id==='brand'? '品牌':'分类'}}推荐<small>根据您的购买或浏览记录推荐</small></h4>
     <ul v-if="currCategory && currCategory.goods && currCategory.goods.length" >
       <li v-for="i in currCategory.goods " :key="i.id" >
-        <RouterLink to="/" >
+        <RouterLink :to="`/product/${i.id}`" >
          <img :src="i.picture" alt="">
             <div class="info">
               <p class="name ellipsis-2">{{i.name}}</p>
@@ -86,7 +86,6 @@ export default {
     findBrand().then(data => {
       brand.brands = data.result.slice(0, 6)
     })
-    console.log(brand)
     return { menuList, categoryId, currCategory }
   }
 

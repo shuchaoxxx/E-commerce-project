@@ -7,7 +7,7 @@
   <AppHeaderSticky></AppHeaderSticky>
   <!-- 主体内容部分 -->
 
-    <!-- 二级路由 -->
+    <!-- 二级路由 对应路由配置中的children -->
     <RouterView></RouterView>
 
   <!-- 底部 -->

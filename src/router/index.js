@@ -5,6 +5,7 @@ import SubCategory from '@/views/category/sub'
 // import Home from '@/views/home/index'
 const Layout = () => import('@/views/Layout')
 const Home = () => import('@/views/home')
+const Goods = () => import('@/views/goods')
 
 const routes = [
   {
@@ -13,7 +14,8 @@ const routes = [
     children: [
       { path: '/', component: Home },
       { path: '/category/:id', component: TopCategory },
-      { path: '/category/sub/:id', component: SubCategory }
+      { path: '/category/sub/:id', component: SubCategory },
+      { path: '/product/:id', component: Goods }
     ]
   }
 ]
