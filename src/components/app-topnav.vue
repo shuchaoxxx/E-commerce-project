@@ -7,7 +7,7 @@
         <li><a href="JavaScript:;">退出登录</a></li>
        </template>
        <template v-else >
-        <li><a href="JavaScript:;">请先登录</a></li>
+        <li><RouterLink href="JavaScript:;" to="/login" >请先登录</RouterLink></li>
         <li><a href="JavaScript:;">免费注册</a></li>
        </template>
         <li><a href="JavaScript:;">我的订单</a></li>
