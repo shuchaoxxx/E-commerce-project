@@ -3,9 +3,11 @@ import TopCategory from '@/views/category'
 import SubCategory from '@/views/category/sub'
 // import Layout from '@/views/Layout.vue'
 // import Home from '@/views/home/index'
+import LoginCallback from '@/views/login/callback'
 const Layout = () => import('@/views/Layout')
 const Home = () => import('@/views/home')
 const Goods = () => import('@/views/goods')
+// const LoginCallback = () => { '@/views/login/callback' }
 
 const routes = [
   {
@@ -17,9 +19,14 @@ const routes = [
       { path: '/category/sub/:id', component: SubCategory },
       { path: '/product/:id', component: Goods }
     ]
-  }, {
+  },
+  {
     path: '/login',
     component: () => import('@/views/login')
+  },
+  {
+    path: '/login/callback',
+    component: LoginCallback
   }
 ]
 

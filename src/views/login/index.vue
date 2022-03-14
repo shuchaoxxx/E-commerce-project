@@ -30,12 +30,18 @@ import LoginHeader from './components/login-header.vue'
 import LoginFooter from './components/login-footer.vue'
 import LoginForm from './components/login-form.vue'
 import { ref } from '@vue/reactivity'
+import store from '@/store'
+import { useRoute } from 'vue-router'
 // const LoginHeader = () => import('./components/login-header.vue')
 export default {
   name: 'PageLogin',
   components: { LoginHeader, LoginFooter, LoginForm },
   setup () {
+    const route = useRoute()
     const activeName = ref('account')
+
+    // 在每次跳转到登陆液时，就存储回跳地址 使用vuex中的同步方法
+    store.commit('user/setRedirectUrl', route.query.redirectUrl || '/')
     return { activeName }
   }
 }

@@ -37,7 +37,7 @@
           <div class="input">
             <i class="iconfont icon-code"></i>
             <Field :class="{error:errors.code}" v-model="form.code" name="code" type="text " placeholder="请输入验证码" />
-            <span class="code">发送验证码</span>
+            <span @click="send" class="code">{{time === 0?'发送验证码':`${time}后重新发送验证码`}}</span>
           </div>
           <div class="error" v-if="errors.code"><i class="iconfont icon-warning" />{{errors.code}}</div>
         </div>
@@ -55,25 +55,45 @@
       <a @click="login"  href="javascript:;" class="btn">登录</a>
     </Form>
     <div class="action">
-      <img src="https://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_7.png" alt="">
+      <!-- <RouterLink to="/login/callback" > -->
+      <!-- QQ登录按钮 -->
+       <!-- <img src="https://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_7.png" alt="">
+      </RouterLink> -->
+       <!-- <span id="qqLoginBtn"></span> -->
+      <a href="https://graph.qq.com/oauth2.0/authorize?client_id=100556005&response_type=token&scope=all&redirect_uri=http%3A%2F%2Fwww.corho.com%3A8080%2F%23%2Flogin%2Fcallback">
+        <img src="https://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_7.png" alt="">
+      </a>
       <div class="url">
         <a href="javascript:;">忘记密码</a>
         <a href="javascript:;">免费注册</a>
       </div>
     </div>
      </div>
-
 </template>
 <script>
-import { reactive, ref, watch } from 'vue'
+import { onUnmounted, reactive, ref, watch } from 'vue'
 import { Form, Field } from 'vee-validate'
 import schema from '@/utils/vee-validate-schema'
+import { userAccountLogin, userMobileLoginMsg, userMobileLogin } from '@/api/user'
+import store from '@/store'
+import router from '@/router'
+import Message from '@/components/library/Message'
+import { useRoute } from 'vue-router'
+import { useIntervalFn } from '@vueuse/core'
+// import QC from 'qc'
+// import mySchema from '@/utils/vee-validate-schema'
 export default {
   name: 'LoginForm',
   components: {
     Form, Field
   },
+  // 使用选项API
+  // created () {
+  //   this.$message({ type: 'success', text: '成功' })
+  // },
   setup () {
+    const route = useRoute()
+    console.log('route', route)
     // 控制短信登录切换的
     const isMsgLogin = ref(false)
     // 表单对象数据
@@ -106,11 +126,86 @@ export default {
       formCom.value.resetForm()
     })
     const login = async () => {
+      // const router = useRouter()
       const result = await formCom.value.validate()
-      console.log(result)
+      if (result) {
+        try {
+          let data = null
+          if (!isMsgLogin.value) {
+            debugger
+            // 使用账号登录
+            // const { account, password } = form
+            // const { id, account, nickname, avatar, token, mobile } = await userAccountLogin(form)
+            data = await userAccountLogin(form)
+            // 调用store中的mutation方法存取用户信息
+          } else {
+            debugger
+            // 使用手机号短信验证登录
+            // 使用vueuse中的方法来实现
+            data = await userMobileLogin(form)
+          }
+          debugger
+          const { id, account, nickname, avatar, token, mobile } = data.result
+          store.commit('user/setUser', { id, account, nickname, avatar, token, mobile })
+
+          // 在路由地址中取问号后的值用query
+
+          // const route = useRoute()
+          // console.log('route', route)
+          // router.currentRoute.value.fullPath
+          console.log(router.currentRoute.value)
+          router.push(router.currentRoute.value.query.redirectUrl || '/')
+          Message({ type: 'success', text: '登录成功' })
+          debugger
+        } catch (e) {
+          // 失败提示
+          console.log(e)
+          Message({ type: 'error', text: '登录失败' })
+        }
+      }
     }
-    return { isMsgLogin, form, schema: mySchema, formCom, login }
+    const time = ref(1) // 定义时间
+    // 定义暂停和开始函数
+    const { pause, resume } = useIntervalFn(() => {
+      /* your function */
+      time.value--
+      if (time.value <= 0) {
+        pause()
+      }
+    }, 1000, false)
+    onUnmounted(() => {
+      pause()
+    })
+    // 发送请求
+    const send = async () => {
+      const valid = schema.mobile(form.mobile)
+      if (valid === true) {
+        debugger
+
+        if (time.value === 0) {
+          // 没有倒计时才可以
+          await userMobileLoginMsg(form.mobile)
+          Message({ type: 'success', text: '发送成功' })
+          time.value = 60
+          resume()
+        }
+      } else {
+        // 表单校验错误
+        formCom.value.setFieldError('mobile', valid)
+      }
+    }
+    // 组合api的拿到this的方法
+    // const { proxy } = getCurrentInstance()
+    // proxy.$message({ type: 'success' })
+    // onMounted(() => {
+    //   // 创建一个按钮，里面包含链接。去除要使用的来接。另外配置一个
+    //   QC.Login({
+    //     btnId: 'qqLoginBtn'
+    //   })
+    // })
+    return { isMsgLogin, form, schema: mySchema, formCom, login, send, time }
   }
+
 }
 </script>
 
@@ -169,8 +264,9 @@ export default {
           font-size: 14px;
           background: #f5f5f5;
           color: #666;
-          width: 90px;
+          // width: 130px;
           height: 33px;
+          padding: 0 5px;
           cursor: pointer;
         }
       }

@@ -5,6 +5,7 @@
 // import XtxBreadItem from './xtx-bread-item'
 
 import defaultImg from '@/assets/images/200.png'
+import Message from './Message'
 
 // require.context是webpack提供的一个自动导入的API
 // 得到一个文件导入函数，传入路径，可以导入对应的文件
@@ -25,8 +26,10 @@ export default {
       const component = importFn(key).default
       app.component(component.name, component)
     })
-
+    // 调用自定义指令的方法
     defineDirective(app)
+    // 在全局原型上挂载自定义方法
+    app.config.globalProperties.$message = Message
   }
 }
 const defineDirective = (app) => {

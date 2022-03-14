@@ -9,13 +9,20 @@ export default {
         account: '',
         mobileL: '',
         token: ''
-      }
+      },
+      redirectUrl: ''
     }
   },
   getters: {},
   mutations: {
     setUser (state, payload) {
       state.profile = payload
+    },
+    logout (state, payload) {
+      state.profile = {}
+    },
+    setRedirectUrl (state, url) {
+      state.redirectUrl = url
     }
   },
   actions: {

@@ -4,27 +4,22 @@ module.exports = {
   pluginOptions: {
     'style-resources-loader': {
       preProcessor: 'less',
-      patterns: [
-        path.join(__dirname, './src/assets/styles/variables.less'),
-        path.join(__dirname, './src/assets/styles/mixins.less')
-      ]
+      patterns: [path.join(__dirname, './src/assets/styles/variables.less'), path.join(__dirname, './src/assets/styles/mixins.less')]
     }
   },
-  chainWebpack: config => {
+  chainWebpack: (config) => {
     // 图片加载
     config.module
       .rule('images')
       .use('url-loader')
       .loader('url-loader')
-      .tap(options => Object.assign(options, { limit: 10000 }))
+      .tap((options) => Object.assign(options, { limit: 10000 }))
+    // 开启webpack可以被域名访问
+    config.devServer.disableHostCheck(true)
   },
-  // productionSourceMap: true
-  configureWebpack: config => {
-    // 调试JS
-    config.devtool = 'source-map'
+  configureWebpack: {
+    externals: {
+      qc: 'QC'
+    }
   }
-  // css: {
-  //   // 查看CSS属于哪个css文件
-  //   sourceMap: true
-  // }
 }
