@@ -18,7 +18,7 @@
           <GoodName :goods="goods" ></GoodName>
           <GoodsSku :goods="goods" @change="changeSku" ></GoodsSku>
           <XtxNumbox v-model="num" label="数量" :max="goods.inventory" ></XtxNumbox>
-          <XtxButton type="primary" style="margin-left:100px;margin-top:30px" >加入购物车</XtxButton>
+          <XtxButton type="primary" style="margin-left:100px;margin-top:30px" @click="insertCart" >加入购物车</XtxButton>
         </div>
       </div>
       <!-- 商品推荐 -->
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { provide, ref, watch } from 'vue'
+import { getCurrentInstance, provide, ref, watch, nextTick } from 'vue'
 import GoodsRelevant from './components/goods-relevant'
 import { useRoute } from 'vue-router'
 import { findGoods } from '@/api/product'
@@ -53,6 +53,7 @@ import GoodsSku from './components/goods-sku.vue'
 import GoodsTabs from './components/goods-tabs.vue'
 import GoodsHot from './components/goods-hot.vue'
 import GoodsWarm from './components/goods-warm.vue'
+import { useStore } from 'vuex'
 export default {
   name: 'XtxGoodsPage',
   components: { GoodsRelevant, GoodsImage, GoodsSales, GoodName, GoodsSku, GoodsTabs, GoodsHot, GoodsWarm },
@@ -65,13 +66,47 @@ export default {
         goods.value.price = sku.price
         goods.value.oldPrice = sku.oldPrice
         goods.value.inventory = sku.inventory
+        currSku.value = sku
+      } else {
+
       }
     }
+    // 选择的数量
     const num = ref(1)
+    // 加入购物车逻辑
+    const currSku = ref(null)
+    // 获取实例
+    const instance = getCurrentInstance()
+    const store = useStore()
+
+    const insertCart = () => {
+      if (!currSku.value) {
+        return instance.proxy.$message({ text: '请选择商品规格' })
+      }
+      if (num.value > goods.inventory) {
+        return instance.proxy.$message({ text: '库存不足' })
+      }
+
+      store.dispatch('cart/inserCart', {
+        id: goods.value.id,
+        skuId: currSku.value.skuId,
+        name: goods.value.name,
+        picture: goods.value.mainPictures[0],
+        price: currSku.value.price,
+        nowPrice: currSku.value.price,
+        count: num.value,
+        attrsText: currSku.value.specsText,
+        selected: true,
+        isEffective: true,
+        stock: currSku.value.inventory
+      }).then(() => {
+        instance.proxy.$message({ text: '加入购物车成功', type: 'success' })
+      })
+    }
 
     provide('goods', goods)
 
-    return { goods, changeSku, num }
+    return { goods, changeSku, num, insertCart }
   }
 }
 // 定义一个获=获取商品详情的数据
@@ -84,10 +119,10 @@ const useGoods = () => {
     if (newValue && `/product/${newValue}` === route.path) {
       findGoods(route.params.id).then(data => {
         goods.value = data.result
-        // goods.value = null
-        // nextTick(() => {
-        //   goods.value = data.result
-        // })
+        goods.value = null
+        nextTick(() => {
+          goods.value = data.result
+        })
       })
     }
   }, { immediate: true })

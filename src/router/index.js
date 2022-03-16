@@ -7,6 +7,7 @@ import LoginCallback from '@/views/login/callback'
 const Layout = () => import('@/views/Layout')
 const Home = () => import('@/views/home')
 const Goods = () => import('@/views/goods')
+const XtxCartPage = () => import('@/views/cart')
 // const LoginCallback = () => { '@/views/login/callback' }
 
 const routes = [
@@ -17,7 +18,8 @@ const routes = [
       { path: '/', component: Home },
       { path: '/category/:id', component: TopCategory },
       { path: '/category/sub/:id', component: SubCategory },
-      { path: '/product/:id', component: Goods }
+      { path: '/product/:id', component: Goods },
+      { path: '/cart', component: XtxCartPage }
     ]
   },
   {

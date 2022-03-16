@@ -6,6 +6,7 @@
 
 import defaultImg from '@/assets/images/200.png'
 import Message from './Message'
+import Confirm from './Confirm'
 
 // require.context是webpack提供的一个自动导入的API
 // 得到一个文件导入函数，传入路径，可以导入对应的文件
@@ -30,6 +31,7 @@ export default {
     defineDirective(app)
     // 在全局原型上挂载自定义方法
     app.config.globalProperties.$message = Message
+    app.config.globalProperties.$confirm = Confirm
   }
 }
 const defineDirective = (app) => {

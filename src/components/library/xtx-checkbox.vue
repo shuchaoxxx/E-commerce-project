@@ -1,5 +1,5 @@
 <template>
-  <div class="xtx-checkbox" @click="changeChecked()" >
+  <div class="xtx-checkbox" @click="changeChecked" >
     <i v-if="checked" class="iconfont icon-checked"></i>
     <i v-else class="iconfont icon-unchecked"></i>
     <span v-if="$slots.default"><slot /></span>
@@ -24,6 +24,7 @@ export default {
   //   const changeChecked = () => {
   //     checked.value = !checked.value
   //     emit('update:modelValue', checked.value)
+  //     emit('change', checked.value)
   //   }
   //   // 使用侦听器，得到父组件传递数据，给checked数据
   //   watch(() => props.modelValue, () => {
@@ -34,10 +35,11 @@ export default {
   setup (props, { emit }) {
     const checked = useVModel(props, 'modelValue', emit)
     const changeChecked = () => {
-      const newValue = !checked.value
-      checked.value = newValue
+      const newVal = !checked.value
+      // 向父组件传递值
+      checked.value = newVal
       // 让组件支持change事件
-      emit('change', newValue)
+      emit('change', newVal)
     }
     return { checked, changeChecked }
   }
